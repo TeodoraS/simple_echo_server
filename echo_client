@@ -12,7 +12,7 @@ types = get_constants('SOCK_')
 protocols = get_constants('IPPROTO_')
 
 #Create a TCP/IP socket
-sock = socket.create_connection(('127.0.0.1', 50005))
+sock = socket.create_connection(('127.0.0.1', 50018))
 
 print >>sys.stderr, 'Family  :', families[sock.family]
 print >>sys.stderr, 'Type    :', types[sock.type]
@@ -26,14 +26,17 @@ try:
     sock.sendall(message)
 
     #Look for the response
+    datas = []
     amount_recived = 0
     amount_expected = len(message)
 
     while amount_recived < amount_expected:
         data = sock.recv(16)
+        datas.append(data)
         amount_recived += len(data)
-        print >>sys.stderr, 'recived "%s"' % data
-
+        
+        
 finally:
+    print >>sys.stderr, 'Message recived.'
     print >>sys.stderr, 'closing socket'
     sock.close()
