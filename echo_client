@@ -1,13 +1,23 @@
 import socket
 import sys
 
-#Create a TCP/IP socket
-sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+def get_constants(prefix):
+    """Create a dict mapping socket module constants to their names"""
+    return dict( (getattr(socket, n), n)
+                 for n in dir(socket)
+                 if n.startswith(prefix)
+                 )
+families = get_constants('AF_')
+types = get_constants('SOCK_')
+protocols = get_constants('IPPROTO_')
 
-#Connect the socket to the port where the server is listening
-server_address = ('127.0.0.1', 50004)
-print >>sys.stderr, 'connecting to %s port %s' % (server_address)
-sock.connect(server_address)
+#Create a TCP/IP socket
+sock = socket.create_connection(('127.0.0.1', 50005))
+
+print >>sys.stderr, 'Family  :', families[sock.family]
+print >>sys.stderr, 'Type    :', types[sock.type]
+print >>sys.stderr, 'Protocol:', protocols[sock.proto]
+print >>sys.stderr
 
 try:
     #Sent data
